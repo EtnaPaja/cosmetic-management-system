@@ -1,0 +1,111 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getProducts, deleteProduct } from '../store/apis/productApi';
+
+const normalizeText = (text) => {
+  return text
+    .toLowerCase()
+    .replaceAll('ë', 'e')
+    .replaceAll('ç', 'c');
+};
+
+function Products() {
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+
+  const fetchProducts = async () => {
+    const data = await getProducts();
+    setProducts(data);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      'A jeni i sigurt që dëshironi të fshini këtë produkt?'
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    await deleteProduct(id);
+    fetchProducts();
+
+    alert('Produkti u fshi me sukses');
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const searchText = normalizeText(search);
+
+    const matchesSearch =
+      normalizeText(product.name).includes(searchText) ||
+      normalizeText(product.brand).includes(searchText) ||
+      normalizeText(product.category).includes(searchText);
+
+    const matchesCategory =
+      categoryFilter === '' || product.category === categoryFilter;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  return (
+    <div>
+      <h1>Cosmetic Products</h1>
+
+      <input
+        type="text"
+        placeholder="Kërko sipas emrit, markës ose kategorisë..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <select
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
+      >
+        <option value="">Të gjitha kategoritë</option>
+        <option value="Fondatinë">Fondatinë</option>
+        <option value="Buzëkuq">Buzëkuq</option>
+        <option value="Maskara">Maskara</option>
+        <option value="Pudër">Pudër</option>
+        <option value="Blush">Blush</option>
+        <option value="Paletë Hijesh">Paletë Hijesh</option>
+        <option value="Korrektor">Korrektor</option>
+      </select>
+
+      <Link to="/add-product">
+        <button>Add New Product</button>
+      </Link>
+
+      <div className="products-grid">
+        {filteredProducts.map((product) => (
+          <div className="product-card" key={product._id}>
+            <h3>{product.name}</h3>
+
+            <p><strong>Kategoria:</strong> {product.category}</p>
+            <p><strong>Marka:</strong> {product.brand}</p>
+            <p><strong>Çmimi:</strong> {product.price} €</p>
+            <p><strong>Stoku:</strong> {product.stock}</p>
+            <p>{product.description}</p>
+
+            <div className="card-buttons">
+              <Link to={`/edit-product/${product._id}`}>
+                <button>Edit</button>
+              </Link>
+
+              <button onClick={() => handleDelete(product._id)}>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Products;
