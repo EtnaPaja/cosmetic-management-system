@@ -10,6 +10,8 @@ import EditProduct from './pages/EditProduct';
 
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import Orders from './pages/Orders';
+import AddOrder from './pages/AddOrder';
 
 function App() {
   return (
@@ -57,15 +59,32 @@ function App() {
             </ProtectedRoute>
           }
         />
+<Route
+  path="/orders"
+  element={
+    <ProtectedRoute>
+      <Orders />
+    </ProtectedRoute>
+  }
+/>
 
+<Route
+  path="/add-order"
+  element={
+    <ProtectedRoute>
+      <AddOrder />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
       <footer
   style={{
     textAlign: 'center',
-    marginTop: '40px',
+    marginTop: 'auto',
     padding: '20px',
     color: '#7a4f45'
   }}
+
 >
   Luxury Beauty Manager © 2026
 </footer>

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import logo from '../assets/logo.png';
 
 function Navbar() {
   const { user } = useSelector((state) => state.auth);
@@ -14,7 +15,10 @@ function Navbar() {
 
   return (
     <nav>
-      <h2>Luxury Beauty Manager</h2>
+    <div className="logo-container">
+  <img src={logo} alt="E&E Cosmetics" className="logo" />
+  <h2>E&E Cosmetics</h2>
+</div>
 
       <ul>
         <li>
@@ -24,7 +28,13 @@ function Navbar() {
         <li>
           <Link to="/products">Products</Link>
         </li>
+<li>
+  <Link to="/orders">Orders</Link>
+</li>
 
+<li>
+  <Link to="/add-order">Add Order</Link>
+</li>
         <li>
           <Link to="/add-product">Add Product</Link>
         </li>

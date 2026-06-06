@@ -32,8 +32,8 @@ function AddProduct() {
     navigate('/products');
   };
 
-  return (
-    <div>
+ return (
+  <div className="add-product-container">
       <h1>Shto Produkt</h1>
 
       <form onSubmit={handleSubmit}>
