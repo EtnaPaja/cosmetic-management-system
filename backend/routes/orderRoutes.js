@@ -4,11 +4,12 @@ import {
   createOrder,
   deleteOrder,
 } from '../controllers/orderController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').get(getOrders).post(createOrder);
+router.route('/').get(protect, getOrders).post(protect, createOrder);
 
-router.route('/:id').delete(deleteOrder);
+router.route('/:id').delete(protect, deleteOrder);
 
 export default router;

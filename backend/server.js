@@ -5,6 +5,7 @@ import connectDB from './config/database.js';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import { errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
 
@@ -22,6 +23,8 @@ app.use('/api/orders', orderRoutes);
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
+app.use(errorHandler);
+
 
 const PORT = process.env.PORT || 8000;
 
